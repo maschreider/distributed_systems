@@ -1,0 +1,40 @@
+version: "3"
+name: hc
+services:
+    hazelcast-1:
+        network_mode: 'hazelcast-network'
+        container_name: 'node1'
+        environment:
+            - 'HZ_NETWORK_PUBLICADDRESS=192.168.0.229:5701'
+            - HZ_CLUSTERNAME=hc
+        ports:
+            - '5701:5701'
+        image: 'hazelcast/hazelcast:latest'
+    hazelcast-2:
+        network_mode: 'hazelcast-network'
+        container_name: 'node2'
+        environment:
+            - 'HZ_NETWORK_PUBLICADDRESS=192.168.0.229:5702'
+            - HZ_CLUSTERNAME=hc
+        ports:
+            - '5702:5701'
+        image: 'hazelcast/hazelcast:latest'
+    hazelcast-3:
+        network_mode: 'hazelcast-network'
+        container_name: 'node3'
+        environment:
+            - 'HZ_NETWORK_PUBLICADDRESS=192.168.0.229:5703'
+            - HZ_CLUSTERNAME=hc
+        ports:
+            - '5703:5701'
+        image: 'hazelcast/hazelcast:latest'
+    hc-management:
+      container_name: hc-mc
+      image: hazelcast/management-center:latest
+      network_mode: hazelcast-network
+      depends_on:
+        - hazelcast-1
+        - hazelcast-2
+        - hazelcast-3
+      ports:
+        - 8080:8080
